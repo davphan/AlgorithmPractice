@@ -5,14 +5,15 @@ def mergeSort(array: list):
         arr1 = array[:mid]
         arr2 = array[mid:]
 
-        # recursive call on left and right side
+        # recursive call on left and right side, sorts arr1 and arr2
         mergeSort(arr1)
         mergeSort(arr2) 
 
         # tracks indeces for arr1, arr2, and array respectively
         i = j = k = 0
 
-        # copy data to temp arrays, arr1 and arr2
+        # copy data from temp arrays onto main array of current method
+        # call in sorted order
         while i < len(arr1) and j < len(arr2):
             if arr1[i] < arr2[j]:
                 array[k] = arr1[i]
