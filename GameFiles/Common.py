@@ -14,3 +14,5 @@ def write(text: str, size: int) -> pygame.Surface:
         font = pygame.font.Font('freesansbold.ttf', size)
         name = font.render(text, True, white)
         return name
+
+

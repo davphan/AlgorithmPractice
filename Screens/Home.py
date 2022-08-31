@@ -1,5 +1,6 @@
-import pygame
+import pygame, sys
 from GameFiles.Common import *
+from Screens.BinarySearch import BinarySearch
 
 class Home (pygame.Surface):
     """Home Screen for the Algorithm Visualizer.
@@ -8,7 +9,9 @@ class Home (pygame.Surface):
         screen (Surface): Display Screen
     """
     def __init__(self, screen: pygame.Surface) -> pygame.Surface:
-        super().__init__(screen.get_size())
+        # display screen
+        self.screen = screen
+        super().__init__(self.screen.get_size())
         # screen dimensions
         self.width = self.get_width()
         self.height = self.get_height()
@@ -20,6 +23,7 @@ class Home (pygame.Surface):
         # !!! EDIT AS MORE ARE ADDED !!!
         self.searchAlgStrings = ['Binary Search']
         self.sortAlgStrings = ['Merge Sort', 'Quick Sort', 'Selection Sort']
+        self.algTextPos = {} # key: str, val: pygame.Rect
         # colors
         self.white = (255, 255, 255)
 
@@ -28,9 +32,40 @@ class Home (pygame.Surface):
         titleRect = title.get_rect(center=(self.width // 2, self.height // 6))
         self.blit(title, titleRect)
 
+        # Create algorithm lists and buttons
         self.createAlgorithmText()
 
-        screen.blit(self, (0, 0))
+        # Draw everything to screen
+        self.screen.blit(self, (0, 0))
+
+
+        # Main game loop
+        while 1:
+            pygame.time.Clock().tick(60)
+
+            mouse = pygame.mouse.get_pos()
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    sys.exit()
+                for alg in self.algTextPos:
+                    algRect = self.algTextPos[alg]
+                    if event.type == pygame.MOUSEBUTTONDOWN:
+                        if algRect.left <= mouse[0] <= algRect.right and algRect.top <= mouse[1] <= algRect.bottom:
+                            pygame.draw.line(screen, self.white, (algRect.left, algRect.bottom), (algRect.right, algRect.bottom), 2)
+                            # switch to different screens
+                            if alg == 'Binary Search':
+                                BinarySearch(self.screen)
+                                self.screen.blit(self, (0, 0))
+                if event.type == pygame.MOUSEBUTTONUP:
+                    self.screen.blit(self, (0, 0))
+
+            pygame.display.flip()
+
+
+
+
+
 
 
     def createAlgorithmText(self) -> None:
@@ -44,28 +79,21 @@ class Home (pygame.Surface):
         sortRect = sortTitle.get_rect(center=(self.sortCol, self.titlesHeight))
         self.blits(((searchTitle, searchRect), (sortTitle, sortRect)), False)
 
-        # list of algorithms as rendered text Surfaces
-        searchAlgList = []
-        for alg in self.searchAlgStrings:
-            searchAlgList.append(write(alg, 24))
+        # draw algorithm buttons
+        self.drawAlgLists(self.searchAlgStrings, self.searchCol)
+        self.drawAlgLists(self.sortAlgStrings, self.sortCol)
 
-        sortAlgList = []
-        for alg in self.sortAlgStrings:
-            sortAlgList.append(write(alg, 24))
-
-        self.drawAlgLists(searchAlgList, self.searchCol)
-        self.drawAlgLists(sortAlgList, self.sortCol)
-
-    def drawAlgLists(self, algList: list, col: int) -> None:
-        """Draw each text surface in a list to the Home Screen in the
-        specified column
+    def drawAlgLists(self, algList: 'list[str]', col: int) -> None:
+        """Draw each name in a list to the Home Screen in the
+        specified column location
 
         Args:
-            algList (list[Surface]): _description_
+            algList (list[str]): _description_
             col (_type_): _description_
         """
         for i in range(len(algList)):
-            searchAlgCenter = (col, self.titlesHeight + 40 + (i * 30))
-            searchAlg = algList[i]
-            searchAlgRect = searchAlg.get_rect(center=searchAlgCenter)
-            self.blit(searchAlg, searchAlgRect)
+            algCenter = (col, self.titlesHeight + 40 + (i * 30))
+            alg = write(algList[i], 24)
+            algRect = alg.get_rect(center=algCenter)
+            self.blit(alg, algRect)
+            self.algTextPos[algList[i]] = algRect
