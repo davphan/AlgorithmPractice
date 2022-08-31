@@ -7,7 +7,7 @@ def mergeSort(array: list):
 
         # recursive call on left and right side, sorts arr1 and arr2
         mergeSort(arr1)
-        mergeSort(arr2) 
+        mergeSort(arr2)
 
         # tracks indeces for arr1, arr2, and array respectively
         i = j = k = 0
@@ -22,7 +22,7 @@ def mergeSort(array: list):
                 array[k] = arr2[j]
                 j += 1
             k += 1
-        
+
         # sorts remaining elements of longer list
         while i < len(arr1):
             array[k] = arr1[i]
