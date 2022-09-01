@@ -53,12 +53,13 @@ class Home (pygame.Surface):
                     if event.type == pygame.MOUSEBUTTONDOWN:
                         if algRect.left <= mouse[0] <= algRect.right and algRect.top <= mouse[1] <= algRect.bottom:
                             pygame.draw.line(screen, self.white, (algRect.left, algRect.bottom), (algRect.right, algRect.bottom), 2)
+                    if event.type == pygame.MOUSEBUTTONUP:
+                        self.screen.blit(self, (0, 0))
+                        if algRect.left <= mouse[0] <= algRect.right and algRect.top <= mouse[1] <= algRect.bottom:
                             # switch to different screens
                             if alg == 'Binary Search':
                                 BinarySearch(self.screen)
                                 self.screen.blit(self, (0, 0))
-                if event.type == pygame.MOUSEBUTTONUP:
-                    self.screen.blit(self, (0, 0))
 
             pygame.display.flip()
 

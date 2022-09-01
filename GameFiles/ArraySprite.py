@@ -2,13 +2,15 @@ import pygame
 
 class ArrayElement(pygame.Surface):
 
-    def __init__(self, num, coords, screen):
+    def __init__(self, num, coords, visible, screen):
         super().__init__((60, 60))
 
         # instance variables
+        self.val = num
         self.coords = coords
         self.screen = screen
         self.speed = 5
+        self.visible = visible
 
         # position number
         start = 21
@@ -20,9 +22,13 @@ class ArrayElement(pygame.Surface):
         # draw array element
         num = str(num)
         white = (255, 255, 255)
-        pygame.draw.rect(self, white, pygame.Rect((0, 0), self.get_size()), 5)
+        gray = (105,105,105)
+        color = white
+        if not visible:
+            color = gray
+        pygame.draw.rect(self, color, pygame.Rect((0, 0), self.get_size()), 5)
         font = pygame.font.Font('freesansbold.ttf', 32)
-        text = font.render(num, True, white)
+        text = font.render(num, True, color)
         self.blit(text, (start, 15))
 
         # draw onto screen
@@ -60,3 +66,9 @@ class ArrayElement(pygame.Surface):
             self.coords = (x, y)
 
             self.screen.blit(self, self.coords)
+
+    def changeState(self):
+        if self.visible:
+            self.__init__(self.num, self.coords, False, self.screen)
+        else:
+            self.__init__(self.num, self.coords, True, self.screen)
