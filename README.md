@@ -46,7 +46,7 @@ in the command line. Note that your current directory must be the top of the
 > of the home screen. To return home, just break the current screen's while loop.
 ### Common.py
 > The `Common.py` file holds simple methods that are used everywhere. It differs
-> from the GameFiles folder by its simplicity (only functions instead of classes)
+> from the GameFiles classes by its simplicity (only functions instead of classes)
 > and very frequent use cases, and should be imported to every file.
 
 # Patch Notes
